@@ -1,0 +1,20 @@
+#!/bin/bash
+
+IPADDR=$1
+PORT=$2
+
+while [ "1" == "1" ]
+do
+
+result=`echo -e "\n" | redis-cli -h $IPADDR -p $PORT 2>&1 /dev/null | grep refused | wc -l`
+if [ $result  ==  0 ]
+then
+        echo "Redis is open."
+        break
+else
+        echo "Redis is down"
+fi
+
+sleep 1
+
+done

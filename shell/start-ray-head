@@ -1,0 +1,11 @@
+#!/bin/bash
+ulimit -u 65536
+(tensorboard --logdir=~/ray_results --host 0.0.0.0 --port=$PAI_CONTAINER_HOST_raytensorBoardPort_PORT_LIST &)
+(ray start --head --memory=$(($PAI_CURRENT_TASK_ROLE_MEM_MB*1024*1024)) \
+        --object-store-memory=$(($PAI_CURRENT_TASK_ROLE_MEM_MB*768*1024)) \
+        --num-cpus=$PAI_CURRENT_TASK_ROLE_CPU_COUNT \
+        --num-gpus=$PAI_CURRENT_TASK_ROLE_GPU_COUNT \
+        --port=$PAI_CONTAINER_HOST_redis_PORT_LIST \
+        --dashboard-host=0.0.0.0 --dashboard-port=$PAI_CONTAINER_HOST_dashboard_PORT_LIST \
+        --object-manager-port=$PAI_CONTAINER_HOST_omanager_PORT_LIST \
+        --node-manager-port=$PAI_CONTAINER_HOST_nmanager_PORT_LIST --block &)

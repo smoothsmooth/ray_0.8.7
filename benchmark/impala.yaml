@@ -1,0 +1,15 @@
+impala-benchmark:
+    env: PongNoFrameskip-v4
+    run: IMPALA
+    config:
+        sample_batch_size: 50
+        train_batch_size: 1000
+        num_workers: 79
+        num_envs_per_worker: 5
+        broadcast_interval: 5
+        object_store_memory: 214748364800
+        max_sample_requests_in_flight_per_worker: 1
+        num_data_loader_buffers: 4
+        num_gpus: 4
+        model:
+          dim: 42

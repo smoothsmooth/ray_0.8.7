@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+#coding:utf-8
+import os
+import time
+import subprocess
+
+while(True):
+    sum = 0
+    for i in range(int(os.getenv('PAI_TASK_ROLE_TASK_COUNT_Node'))):
+
+        Node_Nmanager_Port = os.getenv('PAI_Node_%d_nmanager_PORT' % i)
+        Node_Omanager_Port = os.getenv('PAI_Node_%d_omanager_PORT' % i)
+        Node_IP = os.getenv('PAI_HOST_IP_Node_%d' % i)
+
+        object_result = subprocess.getstatusoutput(
+            'echo -e "\n" | redis-cli -h %s -p %s 2>&1 /dev/null | grep refused | wc -l' % (Node_IP, Node_Nmanager_Port))
+        node_result = subprocess.getstatusoutput(
+            'echo -e "\n" | redis-cli -h %s -p %s 2>&1 /dev/null | grep refused | wc -l' % (Node_IP, Node_Omanager_Port))
+
+        node_sum_result = int(object_result[1])+int(node_result[1])
+
+        if node_sum_result > 0:
+            print('No.%dNode ip:%s Waiting' % (i, Node_IP))
+        else:
+            print('No.%dNode ip:%s Started' % (i, Node_IP))
+
+        sum += node_sum_result
+    print(sum)
+    if sum == 0:
+        break
+    time.sleep(2)
+

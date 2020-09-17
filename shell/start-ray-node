@@ -1,0 +1,21 @@
+#!/bin/bash
+
+ulimit -u 65536
+bash /shell/verify-redis-port $PAI_HOST_IP_Head_0 $PAI_PORT_LIST_Head_0_redis
+
+sleep $(($PAI_CURRENT_TASK_ROLE_CURRENT_TASK_INDEX*2))
+
+ray start --memory=$(($PAI_CURRENT_TASK_ROLE_MEM_MB*1024*1024)) \
+        --num-cpus=$PAI_CURRENT_TASK_ROLE_CPU_COUNT \
+        --num-gpus=$PAI_CURRENT_TASK_ROLE_GPU_COUNT \
+        --object-store-memory=$(($PAI_CURRENT_TASK_ROLE_MEM_MB*768*1024)) \
+        --address=$PAI_HOST_IP_Head_0:$PAI_PORT_LIST_Head_0_redis \
+        --redis-password=5241590000000000 \
+        --object-manager-port=$PAI_CONTAINER_HOST_omanager_PORT_LIST \
+        --node-manager-port=$PAI_CONTAINER_HOST_nmanager_PORT_LIST --block
+
+while [ "1" = "1" ]
+do
+    sleep 100
+done
+

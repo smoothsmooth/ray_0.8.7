@@ -1,0 +1,12 @@
+#!/bin/bash
+
+(nohup tensorboard --logdir=~/ray_results --host 0.0.0.0 --port=54321 2>&1 &)
+(ray start --object-store-memory=$((300 * 1024 * 1024 * 1024)) \
+        --webui-host=0.0.0.0 --block &)
+
+cd benchmark
+
+pip install gym[atari] lz4 psutil pyyaml
+
+python create_yaml.py
+rllib train -f impala-dynamic.yaml
