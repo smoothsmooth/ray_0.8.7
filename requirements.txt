@@ -13,7 +13,7 @@ pyhdfs
 redis==3.3.2
 pymysql
 cryptography
-torch==1.2.0
+torch==1.7.0
 pyzmq==18.0.0
 opencv-python==4.0.0.21
 tensorflow==1.14.0
